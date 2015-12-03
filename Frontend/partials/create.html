@@ -1,0 +1,47 @@
+
+<form class="container">
+    <fieldset class="form-group">
+        <h2> Create a new Event </h2>
+    </fieldset>
+    <hr />
+    <fieldset class="form-group">
+        <label> Location: </label>
+        <input type="text" class="form-control" ng-model="address" placeholder="Address. Eg. 2450 Aurora Ave N, WA 98109" />
+    </fieldset>
+    <hr />
+    <fieldset class="form-group">
+        <label> Name of Event: </label>
+        <input type="text" class="form-control" ng-model="nameOfEvent" placeHolder="Eg. Fred's Birthday" />
+    </fieldset>
+    <hr />
+    <fieldset class="form-group">
+        <label> Involving ... </label>
+        <select class="form-control" ng-model="visibility">
+            <option ng-value="closeFriends"> Close Friends </option>
+            <option ng-value="friends"> Friends </option>
+            <option ng-value="family"> Family </option>
+            <option ng-value="others"> Others </option>
+            <option ng-value="public"> Public</option>
+        </select>
+    </fieldset>
+    <hr />
+    <fieldset class="form-group">
+        <label> Type of event is ...</label>
+        <select class="form-control" ng-model="etype">
+            <option ng-value="positive"> Positive Atmosphere / Party </option>
+            <option ng-value="neutral"> Announcement / Notice </option>
+            <option ng-value="negative"> Negative Atmosphere </option>
+        </select>
+    </fieldset>
+    <hr />
+    <fieldset class="form-group">
+        <label> Duration of event: </label>
+        <input type="text" class="form-control" ng-model="duration" placeholder="Eg. 0.5" />
+        <small class="text-muted"> In days </small>
+    </fieldset>
+    <hr />
+    <ieldset class="form-group">
+        <input type="button" class="btn btn-primary" ng-click="createNewEvent()" value="Create Event" />
+    </fieldset>
+    <hr />
+</form>
