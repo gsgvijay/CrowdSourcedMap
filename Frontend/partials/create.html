@@ -17,27 +17,27 @@
     <fieldset class="form-group">
         <label> Involving ... </label>
         <select class="form-control" ng-model="visibility">
-            <option ng-value="closeFriends"> Close Friends </option>
-            <option ng-value="friends"> Friends </option>
-            <option ng-value="family"> Family </option>
-            <option ng-value="others"> Others </option>
-            <option ng-value="public"> Public</option>
+            <option value="close"> Close Friends </option>
+            <option value="friends"> Friends </option>
+            <option value="family"> Family </option>
+            <option value="others"> Others </option>
+            <option value="public"> Public</option>
         </select>
     </fieldset>
     <hr />
     <fieldset class="form-group">
         <label> Type of event is ...</label>
         <select class="form-control" ng-model="etype">
-            <option ng-value="positive"> Positive Atmosphere / Party </option>
-            <option ng-value="neutral"> Announcement / Notice </option>
-            <option ng-value="negative"> Negative Atmosphere </option>
+            <option value="positive"> Positive Atmosphere / Party </option>
+            <option value="neutral"> Announcement / Notice </option>
+            <option value="negative"> Negative Atmosphere </option>
         </select>
     </fieldset>
     <hr />
     <fieldset class="form-group">
         <label> Duration of event: </label>
         <input type="text" class="form-control" ng-model="duration" placeholder="Eg. 0.5" />
-        <small class="text-muted"> In days </small>
+        <small class="text-muted"> In hours </small>
     </fieldset>
     <hr />
     <ieldset class="form-group">

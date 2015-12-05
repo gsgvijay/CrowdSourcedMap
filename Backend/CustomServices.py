@@ -15,8 +15,8 @@ def main_page():
 @app.route('/login/<user>', methods=['GET'])
 def login(user):
 	hashed_pass = database.get_salted_password(user)
-	if hashed_pass is None:
-		return -1
+	if hashed_pass is False:
+		return "NA"
 	return hashed_pass
 
 
@@ -31,10 +31,11 @@ def get_events(latitude, longitude, max_dist = 5):
 	return events
 
 
-@app.route('/post_event/<user>/<name>/<visibility>/<etype>/<nature>/<latitude>/<longitude>/<duration>')
-def post_event(user, name, visibility, etype, nature, latitude, longitude, duration):
-	event_id = database.create_event(user, name, visibility, etype, nature, latitude, longitude, duration)
-	return event_id
+@app.route('/post_event/<user>/<name>/<visibility>/<etype>/<latitude>/<longitude>/<duration>')
+def post_event(user, name, visibility, etype, latitude, longitude, duration):
+	print "Creating event: " + name
+	event_id = database.post_event(user, name, visibility, etype, latitude, longitude, duration)
+	return str(event_id)
 
 
 @app.route('/cancel_event/<user>/<event_id>', methods=['POST'])
