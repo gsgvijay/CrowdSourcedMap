@@ -50,7 +50,18 @@ def cancel_event(user, event_id):
 
 @app.route('/add_circle/<user>/<other_user>/<relationship_type>')
 def add_circle(user, other_user, relationship_type):
-	database.add_to_circles
+	if database.is_existent(other_user):
+		database.add_to_circles(user, other_user, relationship_type)
+		return "1"
+	else:
+		return "0"
+
+
+@app.route('/get_ratings/<user>')
+def get_ratings(user):
+	print "Getting the rating for the user"
+	ratings = database.get_ratings(user)
+	return str(ratings)
 
 
 if __name__ == '__main__':

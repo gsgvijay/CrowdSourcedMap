@@ -1,7 +1,37 @@
 <div class="container">
     <ul class="nav nav-pills nav-stacked">
-        <li role="presentation" class="active"> <a href="#/myRatings"> My Ratings </a> </li>
-        <li role="presentation"> <a href="#/myEvents"> My Events </a> </li>
-        <li role="presentation"> <a href="#/myCircles"> My Circles </a> </li>
+        <br />
+        <li role="presentation" class="active">
+            <input class="btn btn-primary" type="button" ng-click="getRating()" value="Show my Votes" />
+        </li>
+        <br />
+        <li role="presentation" class="active">
+            <input class="btn btn-primary" type="button" ng-click="getCircles()" value="Add to Circles" />
+        </li>
     </ul>
+    <div ng-show="ratings">
+        <fieldset class="form-group">
+            {{Message}}
+        </fieldset>
+    </div>
+    <br />
+    <div ng-show="circles">
+        <fieldset class="form-group">
+            <label> User Name: </label>
+            <input type="text" ng-model="other_user" />
+            <label> {{CircleMessage}} </label>
+        </fieldset>
+        <fieldset class="form-group">
+            <label> Relationship </label>
+            <select class="form-control" ng-model="relationship">
+                <option value="close"> Close Friend </option>
+                <option value="friend"> Friend </option>
+                <option value="family"> Family </option>
+                <option fvalue="others"> Others </option>
+            </select>
+        </fieldset>
+        <fieldset class="form-group">
+            <input class="btn" type="button" ng-click="addToCircles()" value="Add To Circles" />
+        </fieldset>
+    </div>
 </div>

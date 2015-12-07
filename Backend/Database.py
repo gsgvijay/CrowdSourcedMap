@@ -179,6 +179,19 @@ class Database():
 			votes_dict = doc
 		votes = int(votes_dict['votes'])
 		votes = (votes + int(feedback)) % self.MAX_VOTES
-		#metadata.update({"name": event_user}, {$set: {"votes": votes}, upsert = False})
+		metadata.update({"name": event_user}, {'$set': {"votes": votes}})
 		return True
 
+
+	def is_existent(self, user):
+		if user in self.client.database_names():
+			return True
+		else:
+			return False
+	
+
+	def get_ratings(self, user):
+		database = self.client[user]
+		metadata = database['metadata']
+		doc = metadata.find_one()
+		return doc['votes']

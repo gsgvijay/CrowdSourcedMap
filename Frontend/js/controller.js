@@ -139,6 +139,9 @@ myAppControllers.controller('viewCtrl', function($scope, $rootScope, $http, NgMa
 
 myAppControllers.controller('initializeCtrl', ['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
     // Check if the user exists
+    if($rootScope.user == null) {
+        $rootScope.user = 'vijay';
+    }
     var user = $rootScope.user;
     var login_address = $rootScope.login + user;
     $http({
@@ -149,14 +152,54 @@ myAppControllers.controller('initializeCtrl', ['$scope', '$rootScope', '$http', 
     });
 }]);
 
-myAppControllers.controller('ratingsCtrl', ['$scope', function($scope) {
-    $scope.text = 'These are my ratings';
-}]);
 
-myAppControllers.controller('myEventsCtrl', ['$scope', function($scope) {
-    $scope.text = 'These are my events';
-}]);
-
-myAppControllers.controller('myCirclesCtrl', ['$scope', function($scope) {
-    $scope.text = 'These are my circles';
+myAppControllers.controller('profileCtrl', ['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location) {
+    if($rootScope.user == null) {
+        $rootScope.user = 'vijay';
+    }
+    $scope.ratings = false;
+    $scope.circles = false;
+    $scope.getRating = function() {
+        $scope.ratings = true;
+        $scope.circles = false;
+        var user = $rootScope.user;
+        var url = $rootScope.getRatings + user;
+        $http({
+            method: 'GET',
+            url: url
+        }).then(function(data) {
+            ratings = data.data;
+            $scope.Message = 'Total Ratings: ' + ratings;
+        });
+    };
+    
+    $scope.getCircles = function() {
+        $scope.ratings = false;
+        $scope.circles = true;
+    }
+    
+    $scope.addToCircles = function() {
+        if($scope.other_user == null || $scope.relationship == null) {
+            $scope.CircleMessage = 'Invalid Entries';
+        }
+        else {
+            var user = $rootScope.user;
+            var other = $scope.other_user;
+            var rel = $scope.relationship;
+            var url = $rootScope.addCircle + user +"/" + other + "/" + rel;
+            $http({
+                method: 'GET',
+                url: url
+            }).then(function(data) {
+                var val = data.data;
+                if(val == "1") {
+                    alert('Done');
+                    $location.path('/myProfile');
+                }
+                else {
+                    $scope.CircleMessage = 'User does not exist';
+                }
+            });
+        }
+    }
 }]);

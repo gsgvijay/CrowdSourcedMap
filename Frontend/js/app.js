@@ -6,6 +6,9 @@ myApp.run(function($rootScope) {
     $rootScope.postEvent = 'http://localhost:5000/post_event/';
     $rootScope.cancelEvent = 'http://localhost:5000/cancel_event/';
     $rootScope.login = 'http://localhost:5000/login/';
+    $rootScope.getRatings = 'http://localhost:5000/get_ratings/';
+    $rootScope.checkUser = 'http://localhost:5000/is_existent/';
+    $rootScope.addCircle = 'http:// localhost:5000/add_circle/';
 });
 
 myApp.config(['$routeProvider', function($routeProvider) {
@@ -31,19 +34,8 @@ myApp.config(['$routeProvider', function($routeProvider) {
             controller: 'viewCtrl'
         }).
         when('/myProfile', {
-            templateUrl: 'partials/myProfile.html'
-        }).
-        when('/myRatings', {
             templateUrl: 'partials/myProfile.html',
-            controller: 'ratingsCtrl'
-        }).
-        when('/myEvents', {
-            templateUrl: 'partials/myProfile.html',
-            controller: 'myEventsCtrl'
-        }).
-        when('/myCircles', {
-            templateUrl: 'partials/myProfile.html',
-            controller: 'myCirclesCtrl'
+            controller: 'profileCtrl'
         }).
         otherwise({
             redirectTo: '/login'
