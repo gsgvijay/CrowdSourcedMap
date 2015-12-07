@@ -1,4 +1,12 @@
 
 <div class="container col-md-10 col-md-offset-1">
-    <ng-map default-style="false" center="current-position" geo-fallback-center="[40.74, -74.18]" on-zoom_changed="zoomEvent()"></ng-map>
+    <ng-map default-style="false" center="current-position" geo-fallback-center="[40.74, -74.18]" on-zoom_changed="zoomEvent()">
+        <!--marker ng-repeat="marker in $scope.markers"
+                position="{{marker.latitude}}, {{maker.longitude}}"
+                on-click="showName({{marker.name}})"-->
+        <marker ng-repeat="m in $scope.markers"
+                position="{{m.latitude}}, {{m.longitude}}">
+                <!--on-click="showName({{m .name}})"-->
+        </marker>
+    </ng-map>
 </div>

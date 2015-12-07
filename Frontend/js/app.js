@@ -6,11 +6,18 @@ myApp.run(function($rootScope) {
     $rootScope.postEvent = 'http://localhost:5000/post_event/';
     $rootScope.cancelEvent = 'http://localhost:5000/cancel_event/';
     $rootScope.login = 'http://localhost:5000/login/';
-    $rootScope.user = 'vijay';
 });
 
 myApp.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
+        when('/login', {
+            templateUrl: 'partials/login.html',
+            controller: 'loginCtrl'
+        }).
+        when('/register', {
+            templateUrl: 'partials/register.html',
+            controller: 'registerCtrl'
+        }).
         when('/mainView', {
             templateUrl: 'partials/mainView.html',
             controller: 'initializeCtrl'
@@ -39,6 +46,6 @@ myApp.config(['$routeProvider', function($routeProvider) {
             controller: 'myCirclesCtrl'
         }).
         otherwise({
-            redirectTo: '/mainView'
+            redirectTo: '/login'
         });
 }]);

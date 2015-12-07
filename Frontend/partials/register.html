@@ -1,0 +1,25 @@
+<div class="container col-md-4 col-md-offset-4">
+    <form>
+        <fieldset class="form-group">
+            <h2> Register </h2>
+        </fieldset>
+        <fieldset class="form-group">
+            <label> User Name: </label>
+            <input type="text" class="form-control" ng-model="user" placeholder="Unique User Name" />
+        </fieldset>
+        <fieldset class="form-group">
+            <label> Password: </label>
+            <input type="password" class="form-control" ng-model="password1" placeholder="Password" />
+        </fieldset>
+        <fieldset class="form-group">
+            <label> Re-enter Password: </label>
+            <input type="password" class="form-control" ng-model="password2" placeholder="Password" />
+        </fieldset>
+        <fieldset class="form-group">
+            <input type="button" class="btn btn-primary" ng-click="register()" value="Register" />
+        </fieldset>
+        <fieldset class="form-group">
+            {{Message}}
+        </fieldset>
+    </form>
+</div>

@@ -1,0 +1,27 @@
+---------------------------------------------------------------------------------------------
+|                       CROWDSOURCED SOCIAL MAPPING APPLICATION                             |
+---------------------------------------------------------------------------------------------
+|                                                               Author: Vijay Sankar Ganesh |
+|                                                               Unity ID: vgsankar          |
+|                                                               Student ID: 200066345       |
+---------------------------------------------------------------------------------------------
+|                                                                                           |
+|     I. PRE-REQUISITES                                                                     |
+| -------------------------                                                                 |
+| The application requires the following to run correctly.                                  |
+| 1. MongoDB (the mongod service should be running at port 27017)                           |
+| 2. Internet Connection (the application needs to connect with Google Maps)                |
+| 3. node.js, npm and bower                                                                 |
+| 4. PyMongo, Flask, flask.ext.cors bson, datetime, json and random packages for Python     |
+|                                                                                           |
+|                                                                                           |
+|     II. RUNNING INSTRUCTIONS                                                              |
+| --------------------------------                                                          |
+| 1. mongod service has to be running before the application can be started                 |
+| (running on port 27017 - normally, the default port)                                      |
+| 2. Go to Backend directory and start the flask server by running the following command:   |
+|     python CustomServices.py                                                              |
+| 3. Now, navigate to the Frontend directory and start the node server (angular)            |
+| 4. Open the browser and go to localhost:[port#]/index.html                                |
+|                                                                                           |
+---------------------------------------------------------------------------------------------

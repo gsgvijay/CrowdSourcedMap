@@ -3,6 +3,9 @@
 import pymongo
 from datetime import datetime, timedelta
 from bson import objectid
+import random
+import json
+
 
 class Database():
 	client = None
@@ -12,6 +15,7 @@ class Database():
 		print "Initializing db..."
 		self.client = pymongo.MongoClient("localhost", 27017)
 		self.circles = ['close', 'friends', 'family', 'others']
+		self.MAX_VOTES = 101
 		print "Success"
 	
 
@@ -28,7 +32,7 @@ class Database():
 		return salted_password
 	
 
-	def register(self, user, password, mail):
+	def register(self, user, password):
 		# Create table(s) for the user and store his/her password
 		print "Registering new user..."
 		if user in self.client.database_names():
@@ -36,7 +40,7 @@ class Database():
 			return False
 		database = self.client[user]
 		meta_collection = database['metadata']
-		meta_doc = {'name': user, 'password': password, 'mail': mail, 'votes': 0}
+		meta_doc = {'name': user, 'password': password, 'votes': 100}
 		meta_collection.insert_one(meta_doc)
 		print "Success"
 		return True
@@ -44,30 +48,59 @@ class Database():
 
 	def get_events(self, user, ne_lat, ne_lng, sw_lat, sw_lng):
 		# Get all visible events for the user within his/her range specified by the max distance
-		lat_lng_type = [];
+		data = {};
 		database = self.client[user]
 		for circle in self.circles:
 			if database[circle].count() > 0:
 				docs = database[circle].find()
 				for doc in docs:
-					lat = int(doc['latitude'])
-					lng = int(doc['longitude'])
+					lat = float(doc['latitude'])
+					lng = float(doc['longitude'])
 					etype = doc['type']
+					other_user = doc['user']
+					name = doc['name']
 					if lat>=sw_lat and lat<=ne_lat and lng>=sw_lng and lng<=ne_lng:
-						lat_lng_type.append([lat, lng, etype])
+						data['latitude'] = lat
+						data['longitude'] = lng
+						data['type'] = etype
+						data['user'] = other_user
+						data['name'] = name
 
 		database = self.client['public']
 		collection = database['all']
 		if collection.count() > 0:
 			docs = collection.find()
 			for doc in docs:
-				lat = int(doc['latitude'])
-				lng = int(doc['longitude'])
+				lat = float(doc['latitude'])
+				lng = float(doc['longitude'])
 				etype = doc['type']
+				other_user = doc['user']
+				name = doc['name']
 				if lat>= sw_lat and lat<=ne_lat and lng>=sw_lng and lng<=ne_lng:
-					lat_lng_type.append([lat, lng, etype])
+					data['latitude'] = lat
+					data['longitude'] = lng
+					data['type'] = etype
+					data['user'] = other_user
+					data['name'] = name
 
-		return lat_lng_type
+		database = self.client[user]
+		collection = database['events']
+		if collection.count() > 0:
+			docs = collection.find()
+			for doc in docs:
+				lat = float(doc['latitude'])
+				lng = float(doc['longitude'])
+				etype = doc['type']
+				name = doc['name']
+				if lat>=sw_lat and lat<=ne_lat and lng>=sw_lng and lng<=ne_lng:
+					data['latitude'] = lat
+					data['longitude'] = lng
+					data['type'] = etype
+					data['user'] = user
+					data['name'] = name
+		json_data = json.dumps(data)
+		print json_data
+		return json_data
 
 
 	def post_event(self, user, name, visibility, etype, latitude, longitude, duration):
@@ -75,12 +108,19 @@ class Database():
 		print "Creating new event for the user"
 		database = self.client[user]
 		user_events = database['events']
-		print duration
 		event_doc = {'name':name,'visibility':visibility,'type':etype,'latitude':latitude,'longitude':longitude,'expireAfterSeconds':int(duration)}
-		print event_doc
 		user_events.insert_one(event_doc)
 		user_event_object_id = str((user_events.find_one(event_doc))['_id'])
-		print user_event_object_id
+
+		metadata = database['metadata']
+		vote_docs = metadata.find({"name": user}, {"votes":1, "_id":0})
+		for doc in vote_docs:
+			votes_dict = doc
+		votes = int(votes_dict['votes'])
+
+		random_number = random.randint(0, 100)
+		if random_number <= votes:
+			self.post_to_circles(user, user_event_object_id, name, visibility, latitude, longitude, etype, duration)
 
 		print "Success"
 		return user_event_object_id
@@ -120,8 +160,8 @@ class Database():
 		return True
 
 
-	def post_to_circles(self, current_user, event_id, visibility, latitude, longitude, etype, duration):
-		doc = {'user':current_user, 'event_id':event_id, 'latitude':latitude, 'longitude':longitude, 'type':etype, 'expireAfterSeconds': int(duration)*3600}
+	def post_to_circles(self, current_user, event_id, name, visibility, latitude, longitude, etype, duration):
+		doc = {'user':current_user, 'name': name, 'event_id':event_id, 'latitude':latitude, 'longitude':longitude, 'type':etype, 'expireAfterSeconds': int(duration)*3600}
 		if visibility is 'public':
 			database = self.client['public']
 			collection = database['all']
@@ -130,3 +170,15 @@ class Database():
 			collection = database[visibility]
 		collection.insert_one(doc);
 		return True
+	
+	def report_event(self, event_user, feedback):
+		database = self.client[user]
+		metadata = database['metadata']
+		votes_docs = metadata.find({"name": event_user}, {"votes":1, "_id":0})
+		for doc in votes_docs:
+			votes_dict = doc
+		votes = int(votes_dict['votes'])
+		votes = (votes + int(feedback)) % self.MAX_VOTES
+		#metadata.update({"name": event_user}, {$set: {"votes": votes}, upsert = False})
+		return True
+
