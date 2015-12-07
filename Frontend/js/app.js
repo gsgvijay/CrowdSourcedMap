@@ -8,7 +8,8 @@ myApp.run(function($rootScope) {
     $rootScope.login = 'http://localhost:5000/login/';
     $rootScope.getRatings = 'http://localhost:5000/get_ratings/';
     $rootScope.checkUser = 'http://localhost:5000/is_existent/';
-    $rootScope.addCircle = 'http:// localhost:5000/add_circle/';
+    $rootScope.addCircle = 'http://localhost:5000/add_circle/';
+    $rootScope.postRatings = 'http://localhost:5000/post_ratings/';
 });
 
 myApp.config(['$routeProvider', function($routeProvider) {
@@ -36,6 +37,10 @@ myApp.config(['$routeProvider', function($routeProvider) {
         when('/myProfile', {
             templateUrl: 'partials/myProfile.html',
             controller: 'profileCtrl'
+        }).
+        when('/showEvent', {
+            templateUrl: 'partials/showEvent.html',
+            controller: 'showEventCtrl'
         }).
         otherwise({
             redirectTo: '/login'

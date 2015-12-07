@@ -1,0 +1,19 @@
+<div class="container">
+    <form>
+        <fieldset class="form-group">
+            <label> Name: {{event_name}} </label>
+        </fieldset>
+        <fieldset class="form-group">
+            <label> User: {{event_user}} </label>
+        </fieldset>
+        <fieldset class="form-group">
+            <select class="form-control" ng-model="event_rating">
+                <option value="positive"> Positive </option>
+                <option value="negative"> Negative </option>
+            </select>
+        </fieldset>
+        <fieldset class="form-group">
+            <input type="button" class="btn btn-primary" ng-click="postRating()" value="Post Rating" />
+        </fieldset>
+    </form>
+</div>

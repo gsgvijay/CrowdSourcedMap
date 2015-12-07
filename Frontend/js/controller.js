@@ -90,14 +90,18 @@ myAppControllers.controller('createCtrl', ['$scope', '$rootScope', '$http', func
 }]);
 
 
-myAppControllers.controller('viewCtrl', function($scope, $rootScope, $http, NgMap) {
+myAppControllers.controller('viewCtrl', function($scope, $rootScope, $http, $location, NgMap) {
+    if($rootScope.user == null) {
+        $rootScope.user = 'vijay';
+    }
     var user = $rootScope.user;
     var ne_lat, ne_lng, sw_lat, sw_lng;
-    $scope.markers = [];
-    $scope.showName = function(name) {
-        alert(name);
+
+    $scope.clicked = function() {
+        $location.path('/showEvent');
     }
-    $scope.$on('mapInitialized', function(evt, map) {
+    
+    /*$scope.$on('mapInitialized', function(evt, map) {
         var ne = map.getBounds().getNorthEast();
         var sw = map.getBounds().getSouthWest();
         ne_lat = ne['lat']();
@@ -114,7 +118,7 @@ myAppControllers.controller('viewCtrl', function($scope, $rootScope, $http, NgMa
             console.log($scope.markers);
         });
         
-    });
+    });*/
     $scope.zoomEvent = function() {
         NgMap.getMap().then(function(map) {
             var ne = map.getBounds().getNorthEast();
@@ -123,14 +127,48 @@ myAppControllers.controller('viewCtrl', function($scope, $rootScope, $http, NgMa
             ne_lng = ne['lng']();
             sw_lat = sw['lat']();
             sw_lng = sw['lng']();
-            console.log("Bounds:",ne_lat, ne_lng, sw_lat, sw_lng);   
             var getEvents_Url = $rootScope.getEvents + user + "/" + ne_lat + "/" + ne_lng + "/" + sw_lat + "/" + sw_lng;
             $http({
                 method: 'GET',
                 url: getEvents_Url
             }).then(function(data) {
-                $scope.markers = data.data;
-                console.log($scope.markers);
+                var markers = data.data;
+                var lat = markers.latitude;
+                var lng = markers.longitude;
+                var latlng = new google.maps.LatLng(lat, lng);
+                console.log(latlng);
+                console.log(markers);
+                var type = markers.type;
+                var icon_loc = 'resources/images/';
+                if(type === "positive") {
+                    icon_loc = icon_loc + 'positive.png';
+                }
+                else if(type === 'neutral') {
+                    icon_loc = icon_loc + 'neutral.png';
+                }
+                else {
+                    icon_loc = icon_loc + 'negative.png';
+                }
+                
+                $scope.event_name = markers.name;
+                $scope.event_user = markers.user;
+                
+                $scope.postRating = function() {
+                    $scope.marker_clicked = false;
+                }
+                
+                var marker = new google.maps.Marker({
+                    position: latlng,
+                    map: map,
+                    icon: icon_loc,
+                    title: markers.name
+                });
+                
+                marker.addListener('click', function() {
+                    $rootScope.event_name = markers.name;
+                    $rootScope.event_user = markers.user;
+                    $scope.clicked();
+                });
             });
         });
     }
@@ -202,4 +240,26 @@ myAppControllers.controller('profileCtrl', ['$scope', '$rootScope', '$http', '$l
             });
         }
     }
+}]);
+
+
+myAppControllers.controller('showEventCtrl', ['$scope', '$rootScope', '$http', '$location', function($scope, $rootScope, $http, $location) {
+    $scope.event_name = $rootScope.event_name;
+    $scope.event_user = $rootScope.event_user;
+    $scope.postRating = function() {
+        var url = $rootScope.postRatings + $scope.event_user + "/";
+        if($scope.event_rating == "postive") {
+            url = url + "1";
+        }
+        else {
+            url = url + "-1";
+        }
+        $http({
+            method: 'GET',
+            url: url
+        }).then(function(data) {
+            
+        });
+        $location.path('/view');
+    };
 }]);

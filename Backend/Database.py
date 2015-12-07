@@ -171,6 +171,7 @@ class Database():
 		collection.insert_one(doc);
 		return True
 	
+
 	def report_event(self, event_user, feedback):
 		database = self.client[user]
 		metadata = database['metadata']

@@ -1,12 +1,25 @@
 
 <div class="container col-md-10 col-md-offset-1">
     <ng-map default-style="false" center="current-position" geo-fallback-center="[40.74, -74.18]" on-zoom_changed="zoomEvent()">
-        <!--marker ng-repeat="marker in $scope.markers"
-                position="{{marker.latitude}}, {{maker.longitude}}"
-                on-click="showName({{marker.name}})"-->
-        <marker ng-repeat="m in $scope.markers"
-                position="{{m.latitude}}, {{m.longitude}}">
-                <!--on-click="showName({{m .name}})"-->
-        </marker>
     </ng-map>
+    <br /><br />
+    <div ng-show="marker_clicked">
+        <form>
+            <fieldset class="form-group">
+                <label> Name: {{event_name}} </label>
+            </fieldset>
+            <fieldset class="form-group">
+                <label> User: {{event_user}} </label>
+            </fieldset>
+            <fieldset class="form-group">
+                <section class="form-control" ng-model="event_rating">
+                    <option value="positive"> Positive </option>
+                    <option value="negative"> Negative </option>
+                </section>
+            </fieldset>
+            <fieldset class="form-group">
+                <input type="button" class="btn btn-primary" ng-click="postRating()" value="Post Rating" />
+            </fieldset>
+        </form>
+    </div>
 </div>

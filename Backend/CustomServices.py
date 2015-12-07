@@ -64,6 +64,12 @@ def get_ratings(user):
 	return str(ratings)
 
 
+@app.route('/post_ratings/<user>/<value>')
+def post_ratings(user, value):
+	database.report_event(user, value)
+	return "1"`
+
+
 if __name__ == '__main__':
 	app.run()
 
